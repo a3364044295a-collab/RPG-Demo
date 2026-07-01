@@ -19,7 +19,7 @@ MonoBehaviour:
       AudioClip: {fileID: 0}
       Position: {x: 0, y: 0, z: 0}
       Rotation: {x: 0, y: 0, z: 0}
-      Time: 3
+      Time: 0
     AudioClip: {fileID: 0}
   AttackData:
   - SpawnObj:
@@ -29,3 +29,10 @@ MonoBehaviour:
       Rotation: {x: 0, y: 0, z: 0}
       Time: 0
     AudioClip: {fileID: 8300000, guid: 73552316b142dd147bcd1884fa6cd2f2, type: 3}
+    DamgeValue: 0
+    HardTime: 0
+    RepelVelocity: {x: 0, y: 0, z: 0}
+    RepelTime: 0
+    ScreenImpulseValue: 1
+    ChromaticAberrationValue: 1
+    SkillHitEFConfig: {fileID: 11400000, guid: 3ad1003e22714804d89b0f7ea2414447, type: 2}

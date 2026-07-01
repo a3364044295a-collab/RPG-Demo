@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf100c217b87e794dbe6755b31675cc4, type: 3}
+  m_Name: Test Skill Hit EF Config
+  m_EditorClassIdentifier: 
+  SpawnObj:
+    Prefab: {fileID: 0}
+    AudioClip: {fileID: 0}
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Time: 0
+  AudioClip: {fileID: 8300000, guid: 55958ac56d18412469a1fe8f76bac3a5, type: 3}

@@ -35,6 +35,21 @@ public class SkillAttackData
     //技能音效
     public AudioClip AudioClip;
     //命中数据
+
+    //伤害数值
+    public float DamgeValue;
+    //硬直时间
+    public float HardTime;
+    //击飞、击退程度
+    public Vector3 RepelVelocity;
+    //击飞击退的过渡时间
+    public float RepelTime;
+    //屏幕震动
+    public float ScreenImpulseValue;
+    //色差效果
+    public float ChromaticAberrationValue;
+    //命中效果
+    public SkillHitEFConfig SkillHitEFConfig;
 }
 
 /// <summary>

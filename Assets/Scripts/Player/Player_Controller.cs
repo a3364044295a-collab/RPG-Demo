@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     public Player_Model Model { get => player_Model; }//模型脚本的属性
     private string _currentAnimName; // 记录当前播放的动画名称
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private CinemachineImpulseSource impulseSource;//振动源
     private StateMachine stateMachine;//状态机脚本
 
     #region 配置类的信息
@@ -36,6 +38,16 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
         stateMachine = new StateMachine();//实例化状态机脚本
         stateMachine.Init(this);//状态机脚本初始化
         ChangeState(PlayerState.Idle);//初始切换为待机状态
+    }
+
+    public float TestValue;
+    private void Update()
+    {
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    PostProcessManager.Instance.ChromaticAberrationEF(TestValue);//色散
+        //    ScreenImpulse(TestValue);//震动
+        //}
     }
 
     /// <summary>
@@ -91,17 +103,23 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
         PlayerAudio(currentSkillconfig.AttackData[currentHitIndex].AudioClip);
         //技能释放物体
         SpawnSkillObject(currentSkillconfig.AttackData[currentHitIndex].SpawnObj);
+        currentHitIndex += 1;
     }
 
     public void StopSkillHit(int weaponIndex)
     {
-        currentHitIndex += 1;
+
     }
 
     public void SkillCanSwitch()
     {
     }
     #endregion
+
+    public void ScreenImpulse(float value)
+    {
+        impulseSource.GenerateImpulse(value * 2);
+    }
 
     public void SpawnSkillObject(Skill_SpawnObj spawnObj)
     {
@@ -120,6 +138,34 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
         skillObj.transform.position = Model.transform.position + spawnObj.Position;
         skillObj.transform.eulerAngles = Model.transform.eulerAngles + spawnObj.Rotation;
         PlayerAudio(spawnObj.AudioClip);
+    }
+
+    public void OnHit(IHurt target, Vector3 hitPositoin)
+    {
+        //拿到该段攻击的数据
+        SkillAttackData attackData = currentSkillconfig.AttackData[currentHitIndex - 1];
+        //生成基于命中配置的效果
+        StartCoroutine(DoSkillHitEF(attackData.SkillHitEFConfig, hitPositoin));
+        //播放效果类
+        if (attackData.ScreenImpulseValue != 0) ScreenImpulse(attackData.ScreenImpulseValue);//震动效果
+        if (attackData.ChromaticAberrationValue != 0) PostProcessManager.Instance.ChromaticAberrationEF(attackData.ChromaticAberrationValue);//色散效果
+        //ToDo:传递伤害数据
+    }
+
+    private IEnumerator DoSkillHitEF(SkillHitEFConfig hitEFConfig, Vector3 spawnPoint)
+    {
+        if (hitEFConfig == null) yield break;
+
+        PlayerAudio(hitEFConfig.AudioClip);//播放命中音效
+        if (hitEFConfig.SpawnObj != null && hitEFConfig.SpawnObj.Prefab != null)
+        {
+            yield return new WaitForSeconds(hitEFConfig.SpawnObj.Time);//延迟时间
+            GameObject go = Instantiate(hitEFConfig.SpawnObj.Prefab);//生成攻击效果配置的物体/粒子
+            go.transform.position = hitEFConfig.SpawnObj.Position;
+            go.transform.LookAt(Camera.main.transform);
+            go.transform.eulerAngles += hitEFConfig.SpawnObj.Rotation;
+            PlayerAudio(hitEFConfig.SpawnObj.AudioClip);//播放物体/粒子音效
+        }
     }
 
     /// <summary>
@@ -149,8 +195,5 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
         }
     }
 
-    public void OnHit(IHurt target, Vector3 hitPositoin)
-    {
-        Debug.Log("我攻击到了" + ((Component)target).gameObject.name);
-    }
+
 }
