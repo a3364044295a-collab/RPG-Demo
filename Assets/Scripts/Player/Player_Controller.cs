@@ -43,11 +43,7 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     public float TestValue;
     private void Update()
     {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    PostProcessManager.Instance.ChromaticAberrationEF(TestValue);//色散
-        //    ScreenImpulse(TestValue);//震动
-        //}
+        
     }
 
     /// <summary>
@@ -133,11 +129,24 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     {
         //延迟时间
         yield return new WaitForSeconds(spawnObj.Time);
-        GameObject skillObj = GameObject.Instantiate(spawnObj.Prefab, null);
+        GameObject skillObj = GameObject.Instantiate(spawnObj.Prefab, player_Model.transform);
         //一般特效的生成是相对于主角的
-        skillObj.transform.position = Model.transform.position + spawnObj.Position;
-        skillObj.transform.eulerAngles = Model.transform.eulerAngles + spawnObj.Rotation;
+        skillObj.transform.position = Model.transform.TransformPoint(spawnObj.Position);
+        skillObj.transform.rotation = Model.transform.rotation * Quaternion.Euler(spawnObj.Rotation);
+        SkipParticleTime(skillObj, spawnObj.SkipTime);
         PlayerAudio(spawnObj.AudioClip);
+    }
+
+    private void SkipParticleTime(GameObject effectObj, float skipTime)
+    {
+        if (skipTime <= 0) return;
+
+        ParticleSystem[] particleSystems = effectObj.GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem particleSystem in particleSystems)
+        {
+            particleSystem.Simulate(skipTime, true, true);
+            particleSystem.Play(true);
+        }
     }
 
     public void OnHit(IHurt target, Vector3 hitPositoin)
@@ -154,17 +163,19 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
 
     private IEnumerator DoSkillHitEF(SkillHitEFConfig hitEFConfig, Vector3 spawnPoint)
     {
-        if (hitEFConfig == null) yield break;
-
-        PlayerAudio(hitEFConfig.AudioClip);//播放命中音效
-        if (hitEFConfig.SpawnObj != null && hitEFConfig.SpawnObj.Prefab != null)
+        foreach (Skill_SpawnObj spawnObj in hitEFConfig.SpawnObj)
         {
-            yield return new WaitForSeconds(hitEFConfig.SpawnObj.Time);//延迟时间
-            GameObject go = Instantiate(hitEFConfig.SpawnObj.Prefab);//生成攻击效果配置的物体/粒子
-            go.transform.position = hitEFConfig.SpawnObj.Position;
+            if (spawnObj == null || spawnObj.Prefab == null) continue;
+
+            yield return new WaitForSeconds(spawnObj.Time);
+
+            GameObject go = Instantiate(spawnObj.Prefab);
+            go.transform.position = spawnPoint + spawnObj.Position;
             go.transform.LookAt(Camera.main.transform);
-            go.transform.eulerAngles += hitEFConfig.SpawnObj.Rotation;
-            PlayerAudio(hitEFConfig.SpawnObj.AudioClip);//播放物体/粒子音效
+            go.transform.eulerAngles += spawnObj.Rotation;
+
+            SkipParticleTime(go, spawnObj.SkipTime);
+            PlayerAudio(spawnObj.AudioClip);
         }
     }
 

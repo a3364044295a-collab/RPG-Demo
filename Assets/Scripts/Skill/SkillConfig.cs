@@ -68,4 +68,6 @@ public class Skill_SpawnObj
     public Vector3 Rotation;
     //延迟时间
     public float Time;
+    //跳过特效前面的空白时间
+    public float SkipTime;
 }

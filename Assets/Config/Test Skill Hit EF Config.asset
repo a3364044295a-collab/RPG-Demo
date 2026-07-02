@@ -13,9 +13,36 @@ MonoBehaviour:
   m_Name: Test Skill Hit EF Config
   m_EditorClassIdentifier: 
   SpawnObj:
-    Prefab: {fileID: 0}
+  - Prefab: {fileID: 5298374590639669649, guid: 8fcd769a18be88d409afe5a4f372c744,
+      type: 3}
+    AudioClip: {fileID: 8300000, guid: 55958ac56d18412469a1fe8f76bac3a5, type: 3}
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Time: 0
+    SkipTime: 0
+  - Prefab: {fileID: 8403842100577872429, guid: 8a2f0b3b80b06c742a969e1b2e20ac38,
+      type: 3}
+    AudioClip: {fileID: 0}
+    Position: {x: 0, y: 0, z: 0.29}
+    Rotation: {x: 0, y: 0, z: 0}
+    Time: 0
+    SkipTime: 0.3
+  - Prefab: {fileID: 0}
     AudioClip: {fileID: 0}
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0}
     Time: 0
+    SkipTime: 0
+  - Prefab: {fileID: 0}
+    AudioClip: {fileID: 0}
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Time: 0
+    SkipTime: 0
+  - Prefab: {fileID: 0}
+    AudioClip: {fileID: 0}
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Time: 0
+    SkipTime: 0
   AudioClip: {fileID: 8300000, guid: 55958ac56d18412469a1fe8f76bac3a5, type: 3}
