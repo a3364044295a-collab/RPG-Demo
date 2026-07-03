@@ -45,16 +45,28 @@ public class Player_Model : MonoBehaviour
         skillOwner.OnFootStep();
     }
 
-    private void StartSkillHit(int weaponIndex)
+    private void StartSkillHit(int attackDataIndex)
     {
-        skillOwner.StartSkillHit(weaponIndex);
-        weapons[weaponIndex].StartSkillHit();
+        skillOwner.StartSkillHit(attackDataIndex);//实现音效特效等
+
+        //SkillAttackData attackData = skillOwner.GetAttackData(attackDataIndex);//获取该段攻击的配置
+
+        //foreach (int weaponIndex in attackData.WeaponIndexes)
+        //{
+        //    weapons[weaponIndex].StartSkillHit();
+        //}
     }
 
-    private void StopSkillHit(int weaponIndex)
+    private void StopSkillHit(int attackDataIndex)
     {
-        skillOwner.StopSkillHit(weaponIndex);
-        weapons[weaponIndex].StopSkillHit();
+        skillOwner.StopSkillHit(attackDataIndex);
+
+        //SkillAttackData attackData = skillOwner.GetAttackData(attackDataIndex);
+
+        //foreach (int weaponIndex in attackData.WeaponIndexes)
+        //{
+        //    weapons[weaponIndex].StopSkillHit();
+        //}
     }
 
     private void SkillCanSwitch()

@@ -9,4 +9,5 @@ public interface ISkillOwner
     void SkillCanSwitch();
     void OnHit(IHurt target, Vector3 hitPositoin);
     void OnFootStep();
+    SkillAttackData GetAttackData(int attackDataIndex);
 }

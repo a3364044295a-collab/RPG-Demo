@@ -30,25 +30,36 @@ public class Skill_ReleaseData
 [Serializable]
 public class SkillAttackData
 {
-    //产生的粒子
-    public Skill_SpawnObj SpawnObj;
-    //技能音效
-    public AudioClip AudioClip;
-    //命中数据
+    [Header("攻击范围")]
+    public float AttackRadius = 2f;
+    public float AttackAngle = 90f;
+    public Vector3 AttackOffset;
 
-    //伤害数值
+    [Tooltip("本段攻击开启的武器索引")]
+    public int[] WeaponIndexes;
+    [Tooltip("产生的粒子")]
+    public Skill_SpawnObj[] SpawnObj;
+    [Tooltip("技能音效")]
+    public AudioClip AudioClip;
+
+    [Header("命中效果")]
+    [Tooltip("伤害数值")]
     public float DamgeValue;
-    //硬直时间
+    [Tooltip("硬直时间")]
     public float HardTime;
-    //击飞、击退程度
+    [Tooltip("击退程度")]
     public Vector3 RepelVelocity;
-    //击飞击退的过渡时间
+    [Tooltip("击飞击退的过渡时间")]
     public float RepelTime;
-    //屏幕震动
+    [Tooltip("屏幕震动")]
     public float ScreenImpulseValue;
-    //色差效果
+    [Tooltip("色差效果")]
     public float ChromaticAberrationValue;
-    //命中效果
+    [Tooltip("卡肉效果持续时间")]
+    public float FreezeFrameTime;
+    [Tooltip("命中时缩放时间")]
+    public float ScaleTime;
+    [Tooltip("命中效果")]
     public SkillHitEFConfig SkillHitEFConfig;
 }
 
@@ -66,6 +77,8 @@ public class Skill_SpawnObj
     public Vector3 Position;
     //旋转
     public Vector3 Rotation;
+    //缩放
+    public Vector3 Scale = Vector3.one;
     //延迟时间
     public float Time;
     //跳过特效前面的空白时间

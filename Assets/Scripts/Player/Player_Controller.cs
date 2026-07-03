@@ -43,7 +43,7 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     public float TestValue;
     private void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -80,6 +80,7 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     #region 技能相关
     private SkillConfig currentSkillconfig;
     private int currentHitIndex = 0;
+    private List<IHurt> currentHitEnemies = new List<IHurt>();
 
     public void StartAttack(SkillConfig skillConfig)
     {
@@ -93,13 +94,20 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
         SpawnSkillObject(skillConfig.ReleaseData.SpawnObj);
     }
 
-    public void StartSkillHit(int weaponIndex)
+    public void StartSkillHit(int attackDataIndex)
     {
+        if (currentSkillconfig == null || currentSkillconfig.AttackData == null) return;
+        if (attackDataIndex < 0 || attackDataIndex >= currentSkillconfig.AttackData.Length) return;
+
+        currentHitIndex = attackDataIndex;
+        currentHitEnemies.Clear();
+
+        SkillAttackData attackData = currentSkillconfig.AttackData[attackDataIndex];
         //技能释放音效
-        PlayerAudio(currentSkillconfig.AttackData[currentHitIndex].AudioClip);
+        PlayerAudio(attackData.AudioClip);
         //技能释放物体
-        SpawnSkillObject(currentSkillconfig.AttackData[currentHitIndex].SpawnObj);
-        currentHitIndex += 1;
+        SpawnSkillObjects(attackData.SpawnObj);
+        CheckFanHit(attackData);
     }
 
     public void StopSkillHit(int weaponIndex)
@@ -112,16 +120,65 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     }
     #endregion
 
+    private void CheckFanHit(SkillAttackData attackData)
+    {
+        Vector3 center = Model.transform.TransformPoint(attackData.AttackOffset);
+
+        Collider[] colliders = Physics.OverlapSphere(center, attackData.AttackRadius);
+
+        foreach (Collider other in colliders)
+        {
+            if (!enemyTagList.Contains(other.tag)) continue;
+
+            IHurt enemy = other.GetComponentInParent<IHurt>();
+            if (enemy == null) continue;
+
+            Vector3 dir = other.transform.position - center;
+            dir.y = 0;
+
+            if (dir.sqrMagnitude <= 0.001f) continue;
+
+            float angle = Vector3.Angle(Model.transform.forward, dir.normalized);
+
+            if (angle <= attackData.AttackAngle * 0.5f)
+            {
+                if (currentHitEnemies.Contains(enemy)) continue;
+
+                currentHitEnemies.Add(enemy);
+                Vector3 hitPoint = other.ClosestPoint(center);
+                OnHit(enemy, hitPoint);
+            }
+        }
+    }
+
     public void ScreenImpulse(float value)
     {
         impulseSource.GenerateImpulse(value * 2);
     }
 
+    /// <summary>
+    /// 生成单个物体
+    /// </summary>
+    /// <param name="spawnObj"></param>
     public void SpawnSkillObject(Skill_SpawnObj spawnObj)
     {
         if (spawnObj != null && spawnObj.Prefab != null)
         {
             StartCoroutine(DoSpawnObject(spawnObj));
+        }
+    }
+
+    /// <summary>
+    /// 生成所有物体
+    /// </summary>
+    /// <param name="spawnObjs"></param>
+    public void SpawnSkillObjects(Skill_SpawnObj[] spawnObjs)
+    {
+        if (spawnObjs == null) return;
+
+        foreach (Skill_SpawnObj spawnObj in spawnObjs)
+        {
+            SpawnSkillObject(spawnObj);
         }
     }
 
@@ -133,8 +190,19 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
         //一般特效的生成是相对于主角的
         skillObj.transform.position = Model.transform.TransformPoint(spawnObj.Position);
         skillObj.transform.rotation = Model.transform.rotation * Quaternion.Euler(spawnObj.Rotation);
+        skillObj.transform.localScale = GetSpawnScale(spawnObj);
         SkipParticleTime(skillObj, spawnObj.SkipTime);
         PlayerAudio(spawnObj.AudioClip);
+    }
+
+    /// <summary>
+    /// 如果缩放为0就默认变为1
+    /// </summary>
+    /// <param name="spawnObj"></param>
+    /// <returns></returns>
+    private Vector3 GetSpawnScale(Skill_SpawnObj spawnObj)
+    {
+        return spawnObj.Scale == Vector3.zero ? Vector3.one : spawnObj.Scale;
     }
 
     private void SkipParticleTime(GameObject effectObj, float skipTime)
@@ -152,31 +220,57 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     public void OnHit(IHurt target, Vector3 hitPositoin)
     {
         //拿到该段攻击的数据
-        SkillAttackData attackData = currentSkillconfig.AttackData[currentHitIndex - 1];
+        SkillAttackData attackData = currentSkillconfig.AttackData[currentHitIndex];
         //生成基于命中配置的效果
         StartCoroutine(DoSkillHitEF(attackData.SkillHitEFConfig, hitPositoin));
         //播放效果类
         if (attackData.ScreenImpulseValue != 0) ScreenImpulse(attackData.ScreenImpulseValue);//震动效果
         if (attackData.ChromaticAberrationValue != 0) PostProcessManager.Instance.ChromaticAberrationEF(attackData.ChromaticAberrationValue);//色散效果
+
+        StartFreezeFrame(attackData.FreezeFrameTime, attackData.ScaleTime);
         //ToDo:传递伤害数据
+    }
+
+    private void StartFreezeFrame(float time, float timeScale)
+    {
+        if (time > 0)
+            StartCoroutine(HitStop(time, timeScale));
+    }
+
+    private IEnumerator HitStop(float time, float timeScale)
+    {
+        Time.timeScale = timeScale;
+        yield return new WaitForSecondsRealtime(time);//这里要用真实时间，不然会受到时间缩放的影响
+        Time.timeScale = 1f;
     }
 
     private IEnumerator DoSkillHitEF(SkillHitEFConfig hitEFConfig, Vector3 spawnPoint)
     {
+        if (hitEFConfig == null) yield break;
+
+        PlayerAudio(hitEFConfig.AudioClip);
+        if (hitEFConfig.SpawnObj == null) yield break;
+
         foreach (Skill_SpawnObj spawnObj in hitEFConfig.SpawnObj)
         {
-            if (spawnObj == null || spawnObj.Prefab == null) continue;
-
-            yield return new WaitForSeconds(spawnObj.Time);
-
-            GameObject go = Instantiate(spawnObj.Prefab);
-            go.transform.position = spawnPoint + spawnObj.Position;
-            go.transform.LookAt(Camera.main.transform);
-            go.transform.eulerAngles += spawnObj.Rotation;
-
-            SkipParticleTime(go, spawnObj.SkipTime);
-            PlayerAudio(spawnObj.AudioClip);
+            StartCoroutine(DoSkillHitSpawnObj(spawnObj, spawnPoint));
         }
+    }
+
+    private IEnumerator DoSkillHitSpawnObj(Skill_SpawnObj spawnObj, Vector3 spawnPoint)
+    {
+        if (spawnObj == null || spawnObj.Prefab == null) yield break;
+
+        yield return new WaitForSeconds(spawnObj.Time);
+
+        GameObject go = Instantiate(spawnObj.Prefab);
+        go.transform.position = spawnPoint + spawnObj.Position;
+        go.transform.LookAt(Camera.main.transform);
+        go.transform.eulerAngles += spawnObj.Rotation;
+        go.transform.localScale = GetSpawnScale(spawnObj);
+
+        SkipParticleTime(go, spawnObj.SkipTime);
+        PlayerAudio(spawnObj.AudioClip);
     }
 
     /// <summary>
@@ -206,5 +300,8 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
         }
     }
 
-
+    public SkillAttackData GetAttackData(int attackDataIndex)
+    {
+        return currentSkillconfig.AttackData[attackDataIndex];
+    }
 }

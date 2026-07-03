@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf100c217b87e794dbe6755b31675cc4, type: 3}
-  m_Name: Test Skill Hit EF Config
+  m_Name: StandAttack1Hit
   m_EditorClassIdentifier: 
   SpawnObj:
   - Prefab: {fileID: 5298374590639669649, guid: 8fcd769a18be88d409afe5a4f372c744,
