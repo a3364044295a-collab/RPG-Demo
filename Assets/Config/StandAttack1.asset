@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -24,7 +24,11 @@ MonoBehaviour:
       SkipTime: 0
     AudioClip: {fileID: 0}
   AttackData:
-  - SpawnObj:
+  - AttackRadius: 3
+    AttackAngle: 90
+    AttackOffset: {x: 0, y: 0, z: 0}
+    WeaponIndexes: 
+    SpawnObj:
     - Prefab: {fileID: 8942467694012856432, guid: 9860b229ba290fe4db3e67d618464915,
         type: 3}
       AudioClip: {fileID: 0}

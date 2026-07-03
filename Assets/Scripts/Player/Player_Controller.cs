@@ -9,6 +9,7 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     [SerializeField] private CharacterController charactercontroller;//控制器组件
     public CharacterController CharacterController { get => charactercontroller; }//控制器的属性
     public Player_Model Model { get => player_Model; }//模型脚本的属性
+
     private string _currentAnimName; // 记录当前播放的动画名称
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private CinemachineImpulseSource impulseSource;//振动源
@@ -80,10 +81,14 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     #region 技能相关
     private SkillConfig currentSkillconfig;
     private int currentHitIndex = 0;
+    private bool canSwitchSkill;
+    public bool CanSwitchSkill { get => canSwitchSkill; set => canSwitchSkill = value; }
+
     private List<IHurt> currentHitEnemies = new List<IHurt>();
 
     public void StartAttack(SkillConfig skillConfig)
     {
+        CanSwitchSkill = false;//防止立即切换技能
         currentSkillconfig = skillConfig;
         currentHitIndex = 0;
         //播放动画
@@ -117,6 +122,12 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
 
     public void SkillCanSwitch()
     {
+        CanSwitchSkill = true;
+    }
+
+    public void OnSkillOver()
+    {
+        CanSwitchSkill = true;
     }
     #endregion
 
