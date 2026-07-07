@@ -67,6 +67,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.21112931
+        functionName: FootStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.2760736
         functionName: StopSkillHit
         data: 
@@ -74,7 +81,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.34969324
+      - time: 0.32852927
         functionName: SkillCanSwitch
         data: 
         objectReferenceParameter: {instanceID: 0}

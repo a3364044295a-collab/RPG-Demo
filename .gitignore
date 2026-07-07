@@ -34,6 +34,13 @@
 # Jetbrains Rider personal-layer settings
 *.DotSettings.user
 
+# MMD4Mecanim iOS static libraries exceed GitHub's normal file limit and are
+# not needed for this Windows demo project.
+/[Aa]ssets/Plugins/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/
+/[Aa]ssets/Plugins/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS.meta
+/[Aa]ssets/Plugins/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics 2.75/iOS/
+/[Aa]ssets/Plugins/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics 2.75/iOS.meta
+
 # Visual Studio cache directory
 .vs/
 
@@ -104,3 +111,7 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# MMD4Mecanim iOS native libraries are not needed for this PC demo and exceed GitHub's file size limit.
+/[Aa]ssets/Plugins/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/
+/[Aa]ssets/Plugins/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics 2.75/iOS/

@@ -197,13 +197,39 @@ public class Player_Controller : MonoBehaviour, IStateMachineOwner, ISkillOwner
     {
         //延迟时间
         yield return new WaitForSeconds(spawnObj.Time);
+
+        Transform spawnRoot = GetSpawnRoot(spawnObj);
         GameObject skillObj = GameObject.Instantiate(spawnObj.Prefab, player_Model.transform);
-        //一般特效的生成是相对于主角的
-        skillObj.transform.position = Model.transform.TransformPoint(spawnObj.Position);
-        skillObj.transform.rotation = Model.transform.rotation * Quaternion.Euler(spawnObj.Rotation);
+        //一般特效的生成是相对于主角或挂点的
+        skillObj.transform.position = spawnRoot.TransformPoint(spawnObj.Position);
+        skillObj.transform.rotation = spawnRoot.rotation * Quaternion.Euler(spawnObj.Rotation);
         skillObj.transform.localScale = GetSpawnScale(spawnObj);
         SkipParticleTime(skillObj, spawnObj.SkipTime);
         PlayerAudio(spawnObj.AudioClip);
+    }
+
+    private Transform GetSpawnRoot(Skill_SpawnObj spawnObj)
+    {
+        if (spawnObj == null || string.IsNullOrEmpty(spawnObj.AttachPointName))
+        {
+            return Model.transform;
+        }
+
+        Transform attachPoint = FindChildByName(Model.transform, spawnObj.AttachPointName);
+        return attachPoint != null ? attachPoint : Model.transform;
+    }
+
+    private Transform FindChildByName(Transform root, string childName)
+    {
+        if (root.name == childName) return root;
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            Transform found = FindChildByName(root.GetChild(i), childName);
+            if (found != null) return found;
+        }
+
+        return null;
     }
 
     /// <summary>

@@ -73,6 +73,8 @@ public class Skill_SpawnObj
     public GameObject Prefab;
     //生成的音效
     public AudioClip AudioClip;
+    [Tooltip("可选。填写角色模型子物体名称后，粒子会以该挂点为坐标系生成。留空则使用角色模型根节点。")]
+    public string AttachPointName;
     //位置
     public Vector3 Position;
     //旋转

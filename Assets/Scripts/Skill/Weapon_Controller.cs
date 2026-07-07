@@ -6,7 +6,6 @@ using UnityEngine;
 public class Weapon_Controller : MonoBehaviour
 {
     [SerializeField] private new Collider collider;//武器碰撞体
-    [SerializeField] private MeleeWeaponTrail weaponTrail;//刀光脚本
     private List<string> enemyTagList;//可以被打到的标签列表
 
     private List<IHurt> enemyList = new List<IHurt>();//受到伤害的列表，防止重复伤害
@@ -17,19 +16,16 @@ public class Weapon_Controller : MonoBehaviour
         collider.enabled = false;
         this.enemyTagList = enemyTagList;
         this.onHitAction = onHitAction;
-        weaponTrail.Emit = false;
     }
 
     public void StartSkillHit()
     {
         collider.enabled = true;
-        weaponTrail.Emit = true;
     } 
     
     public void StopSkillHit()
     {
         collider.enabled = false;
-        weaponTrail.Emit = false;
         enemyList.Clear();
     }
 

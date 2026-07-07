@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
@@ -133,28 +133,28 @@ Material:
     m_Ints: []
     m_Floats:
     - _1st2nd_Shades_Feather: 0.0001
-    - _1st_ShadeColor_Feather: 0.148
-    - _1st_ShadeColor_Step: 0.463
+    - _1st_ShadeColor_Feather: 0.09
+    - _1st_ShadeColor_Step: 0.36
     - _2nd_ShadeColor_Feather: 0.0001
     - _2nd_ShadeColor_Step: 0
     - _Add_Antipodean_RimLight: 0
     - _AdditionalLightIgnoreCelShade: 0.9
     - _Ap_RimLight_FeatherOff: 0
     - _Ap_RimLight_Power: 0.1
-    - _BaseColor_Step: 0.463
-    - _BaseShade_Feather: 0.148
+    - _BaseColor_Step: 0.36
+    - _BaseShade_Feather: 0.09
     - _Base_Speed: 0
     - _BlurLevelMatcap: 0
     - _BumpScale: 1
     - _BumpScaleMatcap: 1
     - _CameraRolling_Stabilizer: 0
-    - _CelShadeMidPoint: -0.5
-    - _CelShadeSoftness: 0.05
+    - _CelShadeMidPoint: -0.01
+    - _CelShadeSoftness: 0.07
     - _ColorShift_Speed: 0
     - _CullMode: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DirectLightMultiplier: 1
+    - _DirectLightMultiplier: 0.94
     - _DstBlend: 0
     - _EMISSIVE: 0
     - _EmissionMulByBaseColor: 0
@@ -163,8 +163,8 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HighColor_Power: 0
-    - _IndirectLightMultiplier: 1
+    - _HighColor_Power: 0.55
+    - _IndirectLightMultiplier: 0.48
     - _Inverse_MatcapMask: 0
     - _Inverse_Z_Axis_BLD: 1
     - _IsFace: 0
@@ -215,9 +215,9 @@ Material:
     - _OutlineZOffsetMaskRemapStart: 0
     - _Outline_Width: 0
     - _Parallax: 0.02
-    - _ReceiveShadowMappingAmount: 0.65
+    - _ReceiveShadowMappingAmount: 0.46
     - _ReceiveShadowMappingPosOffset: 0
-    - _RimLight: 1
+    - _RimLight: 0.42
     - _RimLight_FeatherOff: 0
     - _RimLight_InsideMask: 0.0001
     - _RimLight_Power: 0.202
@@ -237,7 +237,7 @@ Material:
     - _Tweak_HighColorMaskLevel: 0
     - _Tweak_LightDirection_MaskLevel: 0
     - _Tweak_MatCapUV: 0
-    - _Tweak_MatcapMaskLevel: -0.4
+    - _Tweak_MatcapMaskLevel: -0.18
     - _Tweak_RimLightMaskLevel: 0
     - _Tweak_SystemShadowsLevel: 0
     - _UVSec: 0
@@ -252,22 +252,22 @@ Material:
     - _utsTechnique: 0
     - _utsVersion: 2.075
     m_Colors:
-    - _1st_ShadeColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
+    - _1st_ShadeColor: {r: 0.36, g: 0.35, b: 0.40, a: 1}
     - _2nd_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.96, g: 0.92, b: 0.86, a: 1}
+    - _Color: {r: 0.96, g: 0.92, b: 0.86, a: 1}
     - _ColorShift: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}
     - _Emissive_Color: {r: 0, g: 0, b: 0, a: 1}
-    - _HighColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HighColor: {r: 1, g: 0.78, b: 0.42, a: 1}
     - _IndirectLightMinColor: {r: 0.09999997, g: 0.09999997, b: 0.09999997, a: 1}
-    - _MatCapColor: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 1}
+    - _MatCapColor: {r: 0.25, g: 0.23, b: 0.22, a: 1}
     - _OcclusionMapChannelMask: {r: 1, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Outline_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _RimLightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _RimLightColor: {r: 0.62, g: 0.72, b: 1, a: 1}
     - _ShadowMapColor: {r: 1, g: 0.825, b: 0.78, a: 1}
     - _ViewShift: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
